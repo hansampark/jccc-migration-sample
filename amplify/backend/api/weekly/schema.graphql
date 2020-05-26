@@ -1,0 +1,7 @@
+type Weekly @model {
+  createdAt: AWSDateTime!
+  date: AWSDateTime!
+  id: ID!
+  images: [String!]
+  updatedAt: AWSDateTime!
+}

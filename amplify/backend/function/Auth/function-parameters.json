@@ -1,0 +1,9 @@
+{
+    "permissions": {
+        "auth": {
+            "ampreact545a02d9": [
+                "read"
+            ]
+        }
+    }
+}

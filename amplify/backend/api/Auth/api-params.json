@@ -1,0 +1,41 @@
+{
+    "paths": [
+        {
+            "name": "/items",
+            "lambdaFunction": "Auth",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            }
+        }
+    ],
+    "resourceName": "Auth",
+    "apiName": "Auth",
+    "functionArns": [
+        {
+            "lambdaFunction": "Auth"
+        }
+    ],
+    "privacy": {
+        "auth": 1,
+        "unauth": 0,
+        "authRoleName": "amplify-ampreact-dev-152341-authRole",
+        "unAuthRoleName": "amplify-ampreact-dev-152341-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "Auth",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}

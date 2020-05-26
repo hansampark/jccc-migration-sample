@@ -1,0 +1,11 @@
+{
+    "AppSyncApiName": "weekly",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": "false",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authampreact545a02d9",
+            "Outputs.UserPoolId"
+        ]
+    }
+}
