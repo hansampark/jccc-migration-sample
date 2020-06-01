@@ -7,6 +7,8 @@ import {
   deleteWeekly as DeleteWeekly,
 } from '../graphql/mutations';
 import { listWeeklys as ListWeeklys } from '../graphql/queries';
+import WeeklyImageList from './WeeklyImageList';
+import { AddFileRow } from './FileControls';
 import config from '../aws-exports';
 import 'react-infinite-calendar/styles.css';
 
@@ -15,11 +17,18 @@ const {
   aws_user_files_s3_bucket: bucket,
 } = config;
 
+const reorder = (list, startIndex, endIndex) => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
+};
+
 const Weekly = () => {
   const [date, setDate] = useState('');
-  const [file, updateFile] = useState(null);
+  const [files, setFiles] = useState([]);
   const [weeklys, updateWeeklys] = useState([]);
-  const [id, setId] = useState('');
   useEffect(() => {
     listWeeklys();
   }, []);
@@ -32,30 +41,26 @@ const Weekly = () => {
     updateWeeklys(weeklys.data.listWeeklys.items);
   }
 
-  function handleChange(event) {
-    const {
-      target: { value, files },
-    } = event;
-
-    const fileForUpload = files[0];
-
-    updateFile(fileForUpload || value);
-  }
-
   async function createWeekly() {
-    if (file) {
-      const extension = file.name.split('.')[1];
-      const { type: mimeType } = file;
-      const key = `images/${uuidv4()}.${extension}`;
-      const url = `https://${bucket}.s3-${region}.amazonaws.com/public/${key}`;
-      const inputData = { date, images: [url] };
+    if (files.length > 0) {
+      const metadata = files.map((file, i) => {
+        const extension = file.name.split('.')[1];
+        const { type: mimeType } = file;
+        const key = `images/${uuidv4()}.${extension}`;
+        const url = `https://${bucket}.s3-${region}.amazonaws.com/public/${key}`;
+
+        return { extension, mimeType, key, url, file };
+      });
+
+      const inputData = { date, images: metadata.map((m) => m.url) };
 
       try {
-        await Storage.put(key, file, {
-          contentType: mimeType,
+        metadata.map(async (m, i) => {
+          const { key, file, mimeType } = m;
+          await Storage.put(key, file, {
+            contentType: mimeType,
+          });
         });
-        console.log('[bucket]', bucket, '[region]', region, '[key]', key);
-        console.log('[inputData]', inputData);
         await API.graphql(graphqlOperation(CreateWeekly, { input: inputData }));
       } catch (error) {
         console.log('[error]', error);
@@ -94,7 +99,38 @@ const Weekly = () => {
         onSelect={(d) => setDate(d)}
       />
 
-      <input type="file" onChange={handleChange} style={{ margin: 10 }} />
+      <WeeklyImageList
+        files={files}
+        onReorder={({ files, sourceIndex, destinationIndex }) => {
+          const reorderedFiles = reorder(files, sourceIndex, destinationIndex);
+          setFiles(reorderedFiles);
+        }}
+        onChange={(changedFile, ix) => {
+          const copiedFiles = [...files];
+          copiedFiles[ix] = changedFile;
+          setFiles(copiedFiles);
+        }}
+        onRemove={(ix) => {
+          const copiedFiles = [...files];
+          copiedFiles.splice(ix, 1);
+          setFiles(copiedFiles);
+        }}
+      />
+
+      <AddFileRow
+        key={files.length}
+        onChange={($files) => {
+          // Do not add if file already exists in list
+
+          const $newFiles = Array.from($files).filter(
+            ($file) => !files.find((f) => f.name === $file.name)
+          );
+
+          if ($newFiles.length > 0) {
+            setFiles([...files, ...$newFiles]);
+          }
+        }}
+      />
 
       {weeklys.map((w, i) => (
         <div key={i}>
@@ -132,7 +168,3 @@ const Weekly = () => {
 };
 
 export default Weekly;
-
-// ('https://ampreact578c9eb893db42f68898b5f23803af19152341-dev.s3us-west-2.amazonaws.com/public/images/0c6b5e36-a240-4f2f-a5b2-fd40bd17dbdd.jpg');
-
-// ('https://ampreact578c9eb893db42f68898b5f23803af19152341-dev.s3-us-west-2.amazonaws.com/public/images/0c6b5e36-a240-4f2f-a5b2-fd40bd17dbdd.jpg');
