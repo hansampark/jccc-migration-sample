@@ -1,9 +1,36 @@
 import React, { useEffect } from 'react';
-import logo from './logo.svg';
 import { Auth, API, signInButton } from 'aws-amplify';
-import Weekly from './components/Weekly';
+import Styled from 'styled-components';
+import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
 import { withAuthenticator } from 'aws-amplify-react';
+import Home from './Pages/Home';
+import Weekly from './Pages/Weekly';
+
 import './App.css';
+
+const Wrapper = Styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+`;
+
+const Navigation = Styled.div`
+  position: absolute;
+  margin: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+`;
+
+const StyledLink = Styled(Link)`
+  margin: 10px;
+`;
+
+const ContentWrapper = Styled.div`
+  padding: 40px;
+`;
 
 function App() {
   useEffect(() => {
@@ -29,9 +56,23 @@ function App() {
   });
 
   return (
-    <div className="App">
-      <Weekly />
-    </div>
+    <Router>
+      <div className="App">
+        <Wrapper>
+          <Navigation>
+            <StyledLink to="/">Home</StyledLink>
+            <StyledLink to="/weekly">Weekly</StyledLink>
+          </Navigation>
+
+          <ContentWrapper>
+            <Switch>
+              <Route path="/" exact component={Home} />
+              <Route path="/weekly" component={Weekly} />
+            </Switch>
+          </ContentWrapper>
+        </Wrapper>
+      </div>
+    </Router>
   );
 }
 

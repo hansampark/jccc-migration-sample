@@ -7,8 +7,8 @@ import {
   deleteWeekly as DeleteWeekly,
 } from '../graphql/mutations';
 import { listWeeklys as ListWeeklys } from '../graphql/queries';
-import WeeklyImageList from './WeeklyImageList';
-import { AddFileRow } from './FileControls';
+import WeeklyImageList from '../components/WeeklyImageList';
+import { AddFileRow } from '../components/FileControls';
 import config from '../aws-exports';
 import 'react-infinite-calendar/styles.css';
 
