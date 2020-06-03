@@ -43,3 +43,99 @@ export const deleteWeekly = /* GraphQL */ `
     }
   }
 `;
+export const createVideo = /* GraphQL */ `
+  mutation CreateVideo(
+    $input: CreateVideoInput!
+    $condition: ModelVideoConditionInput
+  ) {
+    createVideo(input: $input, condition: $condition) {
+      category
+      createdAt
+      date
+      id
+      tags
+      title
+      updatedAt
+      youtubeId
+    }
+  }
+`;
+export const updateVideo = /* GraphQL */ `
+  mutation UpdateVideo(
+    $input: UpdateVideoInput!
+    $condition: ModelVideoConditionInput
+  ) {
+    updateVideo(input: $input, condition: $condition) {
+      category
+      createdAt
+      date
+      id
+      tags
+      title
+      updatedAt
+      youtubeId
+    }
+  }
+`;
+export const deleteVideo = /* GraphQL */ `
+  mutation DeleteVideo(
+    $input: DeleteVideoInput!
+    $condition: ModelVideoConditionInput
+  ) {
+    deleteVideo(input: $input, condition: $condition) {
+      category
+      createdAt
+      date
+      id
+      tags
+      title
+      updatedAt
+      youtubeId
+    }
+  }
+`;
+export const createBulletin = /* GraphQL */ `
+  mutation CreateBulletin(
+    $input: CreateBulletinInput!
+    $condition: ModelBulletinConditionInput
+  ) {
+    createBulletin(input: $input, condition: $condition) {
+      createdAt
+      title
+      id
+      date
+      images
+      updatedAt
+    }
+  }
+`;
+export const updateBulletin = /* GraphQL */ `
+  mutation UpdateBulletin(
+    $input: UpdateBulletinInput!
+    $condition: ModelBulletinConditionInput
+  ) {
+    updateBulletin(input: $input, condition: $condition) {
+      createdAt
+      title
+      id
+      date
+      images
+      updatedAt
+    }
+  }
+`;
+export const deleteBulletin = /* GraphQL */ `
+  mutation DeleteBulletin(
+    $input: DeleteBulletinInput!
+    $condition: ModelBulletinConditionInput
+  ) {
+    deleteBulletin(input: $input, condition: $condition) {
+      createdAt
+      title
+      id
+      date
+      images
+      updatedAt
+    }
+  }
+`;

@@ -34,3 +34,81 @@ export const onDeleteWeekly = /* GraphQL */ `
     }
   }
 `;
+export const onCreateVideo = /* GraphQL */ `
+  subscription OnCreateVideo {
+    onCreateVideo {
+      category
+      createdAt
+      date
+      id
+      tags
+      title
+      updatedAt
+      youtubeId
+    }
+  }
+`;
+export const onUpdateVideo = /* GraphQL */ `
+  subscription OnUpdateVideo {
+    onUpdateVideo {
+      category
+      createdAt
+      date
+      id
+      tags
+      title
+      updatedAt
+      youtubeId
+    }
+  }
+`;
+export const onDeleteVideo = /* GraphQL */ `
+  subscription OnDeleteVideo {
+    onDeleteVideo {
+      category
+      createdAt
+      date
+      id
+      tags
+      title
+      updatedAt
+      youtubeId
+    }
+  }
+`;
+export const onCreateBulletin = /* GraphQL */ `
+  subscription OnCreateBulletin {
+    onCreateBulletin {
+      createdAt
+      title
+      id
+      date
+      images
+      updatedAt
+    }
+  }
+`;
+export const onUpdateBulletin = /* GraphQL */ `
+  subscription OnUpdateBulletin {
+    onUpdateBulletin {
+      createdAt
+      title
+      id
+      date
+      images
+      updatedAt
+    }
+  }
+`;
+export const onDeleteBulletin = /* GraphQL */ `
+  subscription OnDeleteBulletin {
+    onDeleteBulletin {
+      createdAt
+      title
+      id
+      date
+      images
+      updatedAt
+    }
+  }
+`;

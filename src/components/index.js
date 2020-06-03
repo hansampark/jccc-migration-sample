@@ -2,7 +2,7 @@
 
 // export { Errors };
 
-// export { Button, ActionButton, IconButton } from './Button';
+export { Button, ActionButton, IconButton } from './Buttons';
 // export { default as Absolute } from './Absolute';
 // export { default as Paper } from './Paper';
 export { default as Section } from './Section';

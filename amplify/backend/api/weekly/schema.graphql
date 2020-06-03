@@ -1,7 +1,33 @@
+enum Sermon {
+  SATURDAY
+  SUNDAY
+  SPEPCIAL
+}
+
 type Weekly @model {
   createdAt: AWSDateTime!
   date: AWSDateTime!
   id: ID!
+  images: [String!]
+  updatedAt: AWSDateTime!
+}
+
+type Video @model {
+  category: String!
+  createdAt: AWSDateTime!
+  date: AWSDateTime
+  id: ID!
+  tags: [Sermon!]
+  title: String!
+  updatedAt: AWSDateTime!
+  youtubeId: String!
+}
+
+type Bulletin @model {
+  createdAt: AWSDateTime!
+  title: String!
+  id: ID!
+  date: AWSDateTime!
   images: [String!]
   updatedAt: AWSDateTime!
 }
