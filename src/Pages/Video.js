@@ -138,7 +138,6 @@ class VideoForm extends React.Component {
   render() {
     const { title, date, url, category, loading, errors } = this.state;
     const vid = url && extractYoutubeVideoID(url);
-    console.log('[category]', category);
 
     return (
       <Form onSubmit={this.handleSubmit}>
@@ -291,7 +290,7 @@ class VideoForm extends React.Component {
         this.setState({
           loading: false,
         });
-
+        this.props.history.push('/');
         // onSubmit();
       } catch (error) {
         console.log('[error]', error);

@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
 import { withAuthenticator } from 'aws-amplify-react';
 import Home from './Pages/Home';
 import Weekly from './Pages/Weekly';
+import EditWeeklyPage from './Pages/EditWeeklyPage';
 import Video from './Pages/Video';
 
 import './App.css';
@@ -71,6 +72,7 @@ function App() {
               <Route path="/" exact component={Home} />
               <Route path="/videos/new" component={Video} />
               <Route path="/weekly/new" component={Weekly} />
+              <Route path="/weekly/edit" component={EditWeeklyPage} />
             </Switch>
           </ContentWrapper>
         </Wrapper>

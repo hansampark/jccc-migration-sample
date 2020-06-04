@@ -1,9 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-// import { Tabs, TabPanel } from '@zendeskgarden/react-tabs';
-import { Thumbnail as ThumbnailIcon, List } from '../components/Icons';
-import Thumbnail from './Thumbnail';
-// import WeeklyTable from './WeeklyTable';
+import { Thumbnail, List } from '../components/Icons';
+import VideoThumbnail from './VideoThumbnail';
+import VideoTable from './VideoTable';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -44,11 +44,11 @@ const Card = styled.div`
   display: ${(props) => (props.hideOnMobile ? 'none' : 'inline-flex')};
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   width: 48vw;
-  height: 52vw;
+  height: 36vw;
   max-width: 360px;
-  max-height: 420px;
+  max-height: 270px;
   min-width: 155px;
-  min-height: 175px;
+  min-height: 115px;
   margin-right: 0;
   cursor: pointer;
 
@@ -58,14 +58,14 @@ const Card = styled.div`
 
   @media screen and (min-width: 769px) {
     display: inline-flex;
-    width: 22.5vw;
-    height: 24vw;
+    width: 12vw;
+    height: 9vw;
 
     margin-right: 10px;
   }
 `;
 
-const MoreLink = styled.a`
+const MoreLink = styled(Link)`
   display: flex;
   width: 100%;
   height: 100%;
@@ -113,6 +113,8 @@ const ToggleBtnWrapper = styled.div`
 `;
 
 const Label = styled.div`
+  display: flex;
+  align-items: center;
   color: ${(props) => (props.isActive ? '#2196f3' : '#1D1D1D')};
 `;
 
@@ -148,30 +150,24 @@ const ToggleBtn = styled.button`
   }
 `;
 
-export default class WeeklyList extends React.Component {
-  constructor(props) {
-    super(props);
-    const yearList = [2019];
-    if (!yearList.includes(props.year)) {
-      yearList.unshift(props.year);
-    }
-
-    this.state = {
-      years: yearList,
-      isActive: 'THUMBNAIL_VIEW',
-    };
-  }
+export default class VideoList extends React.Component {
+  state = {
+    isActive: 'THUMBNAIL_VIEW',
+  };
 
   render() {
-    const { years, isActive } = this.state;
-    const {
-      loading,
-      header,
-      weeklies,
-      moreLink,
-
-      onWeeklyClick,
-    } = this.props;
+    const { isActive } = this.state;
+    const { loading, header, videos, moreLink, onVideoClick } = this.props;
+    const ACTIVE_VIEW =
+      isActive === 'THUMBNAIL_VIEW' ? (
+        (videos || []).map((video) => (
+          <Card key={video.id} onClick={() => onVideoClick(video)}>
+            <VideoThumbnail {...video} />
+          </Card>
+        ))
+      ) : (
+        <VideoTable data={videos} onRowClick={onVideoClick} />
+      );
 
     return (
       <Wrapper>
@@ -182,14 +178,10 @@ export default class WeeklyList extends React.Component {
         )}
 
         <CardWrapper>
-          {weeklies.map((weekly) => (
-            <Card key={weekly.id} onClick={() => onWeeklyClick(weekly)}>
-              <Thumbnail {...weekly} />
-            </Card>
-          ))}
+          {loading ? <Loading>{'Loading...'}</Loading> : ACTIVE_VIEW}
           {moreLink && (
             <Card>
-              <MoreLink href={moreLink}>{'More..'}</MoreLink>
+              <MoreLink to={moreLink}>{'More..'}</MoreLink>
             </Card>
           )}
         </CardWrapper>

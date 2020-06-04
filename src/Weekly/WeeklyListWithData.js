@@ -15,6 +15,7 @@ const Container = styled.div`
 const WeeklyListWithData = (props) => {
   const [allWeeklys, setWeeklys] = useState([]);
   const [weekly, setWeekly] = useState({});
+
   useEffect(() => {
     listWeeklys();
   }, []);
@@ -26,9 +27,9 @@ const WeeklyListWithData = (props) => {
 
   function handleWeeklyClick(weekly) {
     setWeeklys(weekly);
-  }
 
-  console.log('[allWeekly]', allWeeklys);
+    props.history.push(`/weekly/${weekly.id}`);
+  }
 
   return (
     <Wrapper>

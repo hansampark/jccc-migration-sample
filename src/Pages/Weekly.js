@@ -25,15 +25,13 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-const Weekly = () => {
+const Weekly = (props) => {
   const [date, setDate] = useState('');
   const [files, setFiles] = useState([]);
   const [weeklys, updateWeeklys] = useState([]);
   useEffect(() => {
     listWeeklys();
   }, []);
-
-  console.log('[weeklys]', weeklys);
 
   // Query the API and save them to the state
   async function listWeeklys() {
@@ -62,6 +60,7 @@ const Weekly = () => {
           });
         });
         await API.graphql(graphqlOperation(CreateWeekly, { input: inputData }));
+        props.history.push('/');
       } catch (error) {
         console.log('[error]', error);
       }
@@ -73,6 +72,7 @@ const Weekly = () => {
     console.log('[inputData]', inputData);
     try {
       await API.graphql(graphqlOperation(DeleteWeekly, { input: inputData }));
+      props.history.push('/');
     } catch (error) {
       console.log('[delete error]', error);
     }
