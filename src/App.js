@@ -4,9 +4,16 @@ import Styled from 'styled-components';
 import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
 import { withAuthenticator } from 'aws-amplify-react';
 import Home from './Pages/Home';
-import Weekly from './Pages/Weekly';
+import AllWeekliesPage from './Pages/AllWeekliesPage';
+import NewWeeklyPage from './Pages/NewWeeklyPage';
 import EditWeeklyPage from './Pages/EditWeeklyPage';
-import Video from './Pages/Video';
+
+import AllVideosPage from './Pages/AllVideosPage';
+import NewVideoPage from './Pages/NewVideoPage';
+
+import AllAlbumsPage from './Pages/AllAlbumsPage';
+import NewAlbumPage from './Pages/NewAlbumPage';
+import EditAlbumPage from './Pages/EditAlbumPage';
 
 import './App.css';
 
@@ -65,14 +72,24 @@ function App() {
             <StyledLink to="/">Home</StyledLink>
             <StyledLink to="/videos/new">Videos</StyledLink>
             <StyledLink to="/weekly/new">Weekly</StyledLink>
+            <StyledLink to="/album/new">Album</StyledLink>
           </Navigation>
 
           <ContentWrapper>
             <Switch>
               <Route path="/" exact component={Home} />
-              <Route path="/videos/new" component={Video} />
-              <Route path="/weekly/new" component={Weekly} />
-              <Route path="/weekly/edit" component={EditWeeklyPage} />
+              <Route path="/videos/new" component={NewVideoPage} />
+              <Route path="/videos/sunday" component={AllVideosPage} />
+              <Route path="/videos/saturday" component={AllVideosPage} />
+              <Route path="/videos/special" component={AllVideosPage} />
+
+              <Route path="/weekly" exact component={AllWeekliesPage} />
+              <Route path="/weekly/new" component={NewWeeklyPage} />
+              <Route path="/weekly/:id" component={EditWeeklyPage} />
+
+              <Route path="/album" exact component={AllAlbumsPage} />
+              <Route path="/album/:id" component={EditAlbumPage} />
+              <Route path="/album/new" component={NewAlbumPage} />
             </Switch>
           </ContentWrapper>
         </Wrapper>

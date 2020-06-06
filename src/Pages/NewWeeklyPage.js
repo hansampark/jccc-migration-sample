@@ -1,24 +1,13 @@
-/**
- * EditWeeklyFormModal
- * @flow
- */
-import { isEqual } from 'lodash';
 import React, { useState } from 'react';
-import { withRouter } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
-import { Storage, API, graphqlOperation } from 'aws-amplify';
-import { updateWeekly, deleteWeekly } from '../graphql/mutations';
-import styled from 'styled-components';
 import InfiniteCalendar from 'react-infinite-calendar';
-import moment from 'moment';
-import { Absolute, Relative, Paper, Button, ConfirmModal } from '../components';
-import WeeklyImageList from './WeeklyImageList';
-import {
-  AddFileRow,
-  EditIndicator,
-  EditType,
-} from '../components/FileControls';
+import styled from 'styled-components';
+import { Storage, API, graphqlOperation } from 'aws-amplify';
+import { v4 as uuidv4 } from 'uuid';
+import { createWeekly } from '../graphql/mutations';
 
+import WeeklyImageList from '../Weekly/WeeklyImageList';
+import { AddFileRow } from '../components/FileControls';
+import { Absolute, Relative, Paper, Button } from '../components';
 import config from '../aws-exports';
 import 'react-infinite-calendar/styles.css';
 
@@ -93,32 +82,24 @@ const validate = ({ date, files }) => {
     hasError = true;
   }
 
+  if (!files || files.length < 1) {
+    errors.files = 'At least one image is required.';
+    hasError = true;
+  }
+
   return hasError ? errors : hasError;
 };
 
-const EditWeeklyFormModal = (props) => {
-  const { weekly, onSubmit } = props;
-  const [date, setDate] = useState(moment(weekly.date).toDate());
-  const [files, setFiles] = useState(weekly.images.map((url) => ({ url })));
-  const [saving, setSaving] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const [errors, setErrors] = useState({});
-  const [showConfirm, setShowConfirm] = useState(false);
+const NewWeeklyForm = (props) => {
+  const [date, setDate] = useState('');
+  const [files, setFiles] = useState([]);
 
-  const handleSave = async (e) => {
+  // Query the API and save them to the state
+
+  async function handleSubmit(e) {
     e.preventDefault();
-
-    const errors = validate({ date });
-
-    setErrors(errors);
-
-    if (!errors.date) {
-      setSaving(true);
-
-      const copiedFiles = [...files];
-      let uploadResults;
-      const filesToBeUploaded = files.filter((file) => !file.url);
-      let metadata = filesToBeUploaded.map((file, i) => {
+    if (files.length > 0) {
+      const metadata = files.map((file, i) => {
         const extension = file.name.split('.')[1];
         const { type: mimeType } = file;
         const key = `images/${uuidv4()}.${extension}`;
@@ -127,36 +108,7 @@ const EditWeeklyFormModal = (props) => {
         return { extension, mimeType, key, url, file };
       });
 
-      if (filesToBeUploaded.legnth > 0) {
-        const indexMap = {};
-        let indexOfUploadPromise = 0;
-
-        files.forEach((file, ix) => {
-          if (!file.url) {
-            indexMap[ix] = indexOfUploadPromise;
-            indexOfUploadPromise = indexOfUploadPromise + 1;
-          }
-        });
-
-        // const uploads = filesToBeUploaded.map((file) => upload([file]));
-        // uploadResults = await Promise.all(uploads);
-
-        for (let filesIndex in indexMap) {
-          const uploadResultIndex = indexMap[filesIndex];
-          copiedFiles[filesIndex] = uploadResults[uploadResultIndex];
-        }
-      }
-
-      const images = [
-        ...files.map((file) => file.url),
-        ...metadata.map((m) => m.url),
-      ].filter((image) => !!image);
-
-      const inputData = {
-        id: weekly.id,
-        date,
-        images,
-      };
+      const inputData = { date, images: metadata.map((m) => m.url) };
 
       try {
         metadata.map(async (m, i) => {
@@ -165,42 +117,20 @@ const EditWeeklyFormModal = (props) => {
             contentType: mimeType,
           });
         });
-        await API.graphql(graphqlOperation(updateWeekly, { input: inputData }));
-
-        setSaving(false);
-
-        onSubmit();
-      } catch (err) {
-        console.log('[err]', err);
+        await API.graphql(graphqlOperation(createWeekly, { input: inputData }));
+        props.history.push('/');
+      } catch (error) {
+        console.log('[error]', error);
       }
     }
-  };
-
-  const handleDelete = async (e) => {
-    e.preventDefault();
-
-    setDeleting(true);
-
-    const inputData = {
-      id: weekly.id,
-    };
-
-    await API.graphql(graphqlOperation(deleteWeekly, { input: inputData }));
-
-    setDeleting(false);
-
-    onSubmit();
-  };
+  }
 
   return (
     <Wrapper zDepth={1}>
       <Relative style={{ width: '100%', height: '100%' }}>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <FieldSet>
             <FormSection>
-              {new Date(weekly.date).getTime() !== date.getTime() && (
-                <EditIndicator editType={EditType.EDITED} />
-              )}
               <Label>{'Date *'}</Label>
               <Paper zDepth={1}>
                 <InfiniteCalendar
@@ -214,15 +144,10 @@ const EditWeeklyFormModal = (props) => {
                   onSelect={(d) => setDate(d)}
                 />
               </Paper>
-              {errors.date && <ErrorMessage>{errors.date}</ErrorMessage>}
             </FormSection>
 
             <FormSection>
               <Label>{'Images *'}</Label>
-              {!isEqual(
-                weekly.images.map((url) => ({ url })),
-                files
-              ) && <EditIndicator editType={EditType.EDITED} />}
 
               <WeeklyImageList
                 files={files}
@@ -260,8 +185,6 @@ const EditWeeklyFormModal = (props) => {
                   }
                 }}
               />
-
-              {errors.files && <ErrorMessage>{errors.files}</ErrorMessage>}
             </FormSection>
           </FieldSet>
 
@@ -276,42 +199,13 @@ const EditWeeklyFormModal = (props) => {
                 backgroundColor: 'rgba(255, 255, 255, 0.75)',
               }}
             >
-              <Button
-                key="delete"
-                width={'120px'}
-                label="Delete"
-                danger
-                onClick={() => setShowConfirm(true)}
-                disabled={deleting}
-                loading={deleting}
-                style={{ marginRight: '1rem' }}
-              />
-
-              <Button
-                key="save"
-                label="Save"
-                primary
-                onClick={handleSave}
-                width={'120px'}
-                disabled={saving}
-                loading={saving}
-              />
+              <Button type="submit" label={'Create'} primary />
             </FormSection>
           </Absolute>
         </Form>
-
-        {showConfirm && (
-          <ConfirmModal
-            title={'Confirm'}
-            buttonLabel={'Delete'}
-            message={'Are you sure to delete this video?'}
-            onSubmit={handleDelete}
-            onCancel={() => setShowConfirm(false)}
-          />
-        )}
       </Relative>
     </Wrapper>
   );
 };
 
-export default withRouter(EditWeeklyFormModal);
+export default NewWeeklyForm;

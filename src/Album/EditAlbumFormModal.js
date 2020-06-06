@@ -1,5 +1,5 @@
 /**
- * EditWeeklyFormModal
+ * EditAlbumFormModal
  * @flow
  */
 import { isEqual } from 'lodash';
@@ -7,12 +7,12 @@ import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { Storage, API, graphqlOperation } from 'aws-amplify';
-import { updateWeekly, deleteWeekly } from '../graphql/mutations';
+import { updateAlbum, deleteAlbum } from '../graphql/mutations';
 import styled from 'styled-components';
 import InfiniteCalendar from 'react-infinite-calendar';
 import moment from 'moment';
 import { Absolute, Relative, Paper, Button, ConfirmModal } from '../components';
-import WeeklyImageList from './WeeklyImageList';
+import AlbumImageList from './AlbumImageList';
 import {
   AddFileRow,
   EditIndicator,
@@ -72,6 +72,15 @@ const FormSection = styled.div`
   }
 `;
 
+const Input = styled.input`
+  display: inline-block;
+  flex: 1;
+  border: none;
+  border-bottom: 1px solid ${(props) => (props.error ? '#F44336' : '#2196f3')};
+  padding: 1rem 0;
+  font-size: 1rem;
+`;
+
 const Label = styled.label`
   color: #3c3c3c;
   margin-bottom: 0.5rem;
@@ -96,10 +105,11 @@ const validate = ({ date, files }) => {
   return hasError ? errors : hasError;
 };
 
-const EditWeeklyFormModal = (props) => {
-  const { weekly, onSubmit } = props;
-  const [date, setDate] = useState(moment(weekly.date).toDate());
-  const [files, setFiles] = useState(weekly.images.map((url) => ({ url })));
+const EditAlbumFormModal = (props) => {
+  const { album, onSubmit } = props;
+  const [title, setTitle] = useState(album.title);
+  const [date, setDate] = useState(moment(album.date).toDate());
+  const [files, setFiles] = useState(album.images.map((url) => ({ url })));
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [errors, setErrors] = useState({});
@@ -153,7 +163,8 @@ const EditWeeklyFormModal = (props) => {
       ].filter((image) => !!image);
 
       const inputData = {
-        id: weekly.id,
+        id: album.id,
+        title,
         date,
         images,
       };
@@ -165,7 +176,7 @@ const EditWeeklyFormModal = (props) => {
             contentType: mimeType,
           });
         });
-        await API.graphql(graphqlOperation(updateWeekly, { input: inputData }));
+        await API.graphql(graphqlOperation(updateAlbum, { input: inputData }));
 
         setSaving(false);
 
@@ -182,10 +193,10 @@ const EditWeeklyFormModal = (props) => {
     setDeleting(true);
 
     const inputData = {
-      id: weekly.id,
+      id: album.id,
     };
 
-    await API.graphql(graphqlOperation(deleteWeekly, { input: inputData }));
+    await API.graphql(graphqlOperation(deleteAlbum, { input: inputData }));
 
     setDeleting(false);
 
@@ -193,16 +204,26 @@ const EditWeeklyFormModal = (props) => {
   };
 
   return (
-    <Wrapper zDepth={1}>
+    <Wrapper>
       <Relative style={{ width: '100%', height: '100%' }}>
         <Form>
           <FieldSet>
             <FormSection>
-              {new Date(weekly.date).getTime() !== date.getTime() && (
+              <Label>{'Title *'}</Label>
+
+              <Input
+                type="text"
+                onChange={(e) => setTitle(e.target.value)}
+                value={title}
+              />
+            </FormSection>
+
+            <FormSection>
+              {new Date(album.date).getTime() !== date.getTime() && (
                 <EditIndicator editType={EditType.EDITED} />
               )}
               <Label>{'Date *'}</Label>
-              <Paper zDepth={1}>
+              <Paper>
                 <InfiniteCalendar
                   selected={date}
                   disabledDays={[1, 2, 3, 4, 5, 6]}
@@ -220,11 +241,11 @@ const EditWeeklyFormModal = (props) => {
             <FormSection>
               <Label>{'Images *'}</Label>
               {!isEqual(
-                weekly.images.map((url) => ({ url })),
+                album.images.map((url) => ({ url })),
                 files
               ) && <EditIndicator editType={EditType.EDITED} />}
 
-              <WeeklyImageList
+              <AlbumImageList
                 files={files}
                 onReorder={({ files, sourceIndex, destinationIndex }) => {
                   const reorderedFiles = reorder(
@@ -314,4 +335,4 @@ const EditWeeklyFormModal = (props) => {
   );
 };
 
-export default withRouter(EditWeeklyFormModal);
+export default withRouter(EditAlbumFormModal);

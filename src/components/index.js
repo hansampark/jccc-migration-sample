@@ -12,7 +12,7 @@ export { default as Section } from './Section';
 // export { default as MapSection } from './MapSection';
 export { default as Modal } from './Modal';
 export { default as ConfirmModal } from './ConfirmModal';
-// export { default as Layout } from './Layout';
+export { default as Layout } from './Layout';
 // export { LazyImage, LazyBackgroundImage } from './Image';
 export { default as Page } from './Page';
 export { FlexColumn, FlexRow, FlexFill, FlexCenter } from './Box';

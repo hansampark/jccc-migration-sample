@@ -65,9 +65,9 @@ export const listVideos = /* GraphQL */ `
     }
   }
 `;
-export const getBulletin = /* GraphQL */ `
-  query GetBulletin($id: ID!) {
-    getBulletin(id: $id) {
+export const getAlbum = /* GraphQL */ `
+  query GetAlbum($id: ID!) {
+    getAlbum(id: $id) {
       createdAt
       title
       id
@@ -77,13 +77,13 @@ export const getBulletin = /* GraphQL */ `
     }
   }
 `;
-export const listBulletins = /* GraphQL */ `
-  query ListBulletins(
-    $filter: ModelBulletinFilterInput
+export const listAlbums = /* GraphQL */ `
+  query ListAlbums(
+    $filter: ModelAlbumFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listBulletins(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listAlbums(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         createdAt
         title

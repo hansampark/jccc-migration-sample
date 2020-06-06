@@ -76,9 +76,9 @@ export const onDeleteVideo = /* GraphQL */ `
     }
   }
 `;
-export const onCreateBulletin = /* GraphQL */ `
-  subscription OnCreateBulletin {
-    onCreateBulletin {
+export const onCreateAlbum = /* GraphQL */ `
+  subscription OnCreateAlbum {
+    onCreateAlbum {
       createdAt
       title
       id
@@ -88,9 +88,9 @@ export const onCreateBulletin = /* GraphQL */ `
     }
   }
 `;
-export const onUpdateBulletin = /* GraphQL */ `
-  subscription OnUpdateBulletin {
-    onUpdateBulletin {
+export const onUpdateAlbum = /* GraphQL */ `
+  subscription OnUpdateAlbum {
+    onUpdateAlbum {
       createdAt
       title
       id
@@ -100,9 +100,9 @@ export const onUpdateBulletin = /* GraphQL */ `
     }
   }
 `;
-export const onDeleteBulletin = /* GraphQL */ `
-  subscription OnDeleteBulletin {
-    onDeleteBulletin {
+export const onDeleteAlbum = /* GraphQL */ `
+  subscription OnDeleteAlbum {
+    onDeleteAlbum {
       createdAt
       title
       id

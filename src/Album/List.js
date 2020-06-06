@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-// import { Tabs, TabPanel } from '@zendeskgarden/react-tabs';
+
 import { Thumbnail as ThumbnailIcon, List } from '../components/Icons';
 import Thumbnail from './Thumbnail';
-// import WeeklyTable from './WeeklyTable';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -149,14 +148,14 @@ const ToggleBtn = styled.button`
   }
 `;
 
-export default class WeeklyList extends React.Component {
+export default class AlbumList extends React.Component {
   render() {
     const {
       header,
-      weeklies,
+      albums,
       moreLink,
 
-      onWeeklyClick,
+      onAlbumClick,
     } = this.props;
 
     return (
@@ -168,9 +167,9 @@ export default class WeeklyList extends React.Component {
         )}
 
         <CardWrapper>
-          {weeklies.map((weekly) => (
-            <Card key={weekly.id} onClick={() => onWeeklyClick(weekly)}>
-              <Thumbnail {...weekly} />
+          {albums.map((album) => (
+            <Card key={album.id} onClick={() => onAlbumClick(album)}>
+              <Thumbnail {...album} />
             </Card>
           ))}
           {moreLink && (
@@ -182,16 +181,4 @@ export default class WeeklyList extends React.Component {
       </Wrapper>
     );
   }
-
-  showThumbnailView = () => {
-    this.setState({
-      isActive: 'THUMBNAIL_VIEW',
-    });
-  };
-
-  showListView = () => {
-    this.setState({
-      isActive: 'LIST_VIEW',
-    });
-  };
 }

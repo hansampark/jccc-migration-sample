@@ -23,7 +23,7 @@ type Video @model {
   youtubeId: String!
 }
 
-type Bulletin @model {
+type Album @model {
   createdAt: AWSDateTime!
   title: String!
   id: ID!

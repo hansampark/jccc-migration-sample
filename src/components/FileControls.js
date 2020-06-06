@@ -227,6 +227,7 @@ export const BannerPopupRow = (props) => {
 
     fileInputRef.current.click();
   };
+  console.log('[file][', file);
 
   return (
     <FileRowWrapper>

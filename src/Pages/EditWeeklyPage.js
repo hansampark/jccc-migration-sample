@@ -10,24 +10,29 @@ import EditWeeklyForm from '../Weekly/EditWeeklyFormModal';
 
 const EditWeeklyPage = (props) => {
   const { match, history } = props;
-  const [weekly, setWeekly] = useState();
+  const [weekly, setWeekly] = useState(null);
 
   useEffect(() => {
     fetchWeekly();
   }, []);
 
   async function fetchWeekly() {
-    const weekly = await API.graphql(graphqlOperation(getWeekly));
-    setWeekly(weekly.data);
+    const inputData = { id: match.params.id };
+
+    const weekly = await API.graphql(graphqlOperation(getWeekly, inputData));
+
+    setWeekly(weekly.data.getWeekly);
   }
 
   return (
     <Page>
-      <EditWeeklyForm
-        key={match.params.id}
-        weekly={weekly}
-        onSubmit={() => history.push('/weekly')}
-      />
+      {weekly && (
+        <EditWeeklyForm
+          key={match.params.id}
+          weekly={weekly}
+          onSubmit={() => history.push('/weekly')}
+        />
+      )}
     </Page>
   );
 };

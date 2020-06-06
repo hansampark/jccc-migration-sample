@@ -15,15 +15,23 @@ const Container = styled.div`
 `;
 
 const VideoListWithData = (props) => {
-  const { moreLink } = props;
+  const { moreLink, category } = props;
   const [allVideos, setVideos] = useState([]);
   const [video, setVideo] = useState(null);
   useEffect(() => {
     fetchVideos();
   }, []);
 
+  const filter = {
+    category: {
+      contains: category,
+    },
+  };
+
   async function fetchVideos() {
-    const videos = await API.graphql(graphqlOperation(listVideos));
+    const videos = await API.graphql(
+      graphqlOperation(listVideos, { filter: filter })
+    );
     setVideos(videos.data.listVideos.items);
   }
 

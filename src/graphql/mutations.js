@@ -94,12 +94,12 @@ export const deleteVideo = /* GraphQL */ `
     }
   }
 `;
-export const createBulletin = /* GraphQL */ `
-  mutation CreateBulletin(
-    $input: CreateBulletinInput!
-    $condition: ModelBulletinConditionInput
+export const createAlbum = /* GraphQL */ `
+  mutation CreateAlbum(
+    $input: CreateAlbumInput!
+    $condition: ModelAlbumConditionInput
   ) {
-    createBulletin(input: $input, condition: $condition) {
+    createAlbum(input: $input, condition: $condition) {
       createdAt
       title
       id
@@ -109,12 +109,12 @@ export const createBulletin = /* GraphQL */ `
     }
   }
 `;
-export const updateBulletin = /* GraphQL */ `
-  mutation UpdateBulletin(
-    $input: UpdateBulletinInput!
-    $condition: ModelBulletinConditionInput
+export const updateAlbum = /* GraphQL */ `
+  mutation UpdateAlbum(
+    $input: UpdateAlbumInput!
+    $condition: ModelAlbumConditionInput
   ) {
-    updateBulletin(input: $input, condition: $condition) {
+    updateAlbum(input: $input, condition: $condition) {
       createdAt
       title
       id
@@ -124,12 +124,12 @@ export const updateBulletin = /* GraphQL */ `
     }
   }
 `;
-export const deleteBulletin = /* GraphQL */ `
-  mutation DeleteBulletin(
-    $input: DeleteBulletinInput!
-    $condition: ModelBulletinConditionInput
+export const deleteAlbum = /* GraphQL */ `
+  mutation DeleteAlbum(
+    $input: DeleteAlbumInput!
+    $condition: ModelAlbumConditionInput
   ) {
-    deleteBulletin(input: $input, condition: $condition) {
+    deleteAlbum(input: $input, condition: $condition) {
       createdAt
       title
       id

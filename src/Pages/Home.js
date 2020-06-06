@@ -13,7 +13,7 @@ import { Section } from '../components';
 // import { VideoListWithData } from '../../Video';
 import { WeeklyListWithData } from '../Weekly';
 import { VideoListWithData } from '../Video';
-// import { BulletinListWithData } from '../../Bulletin';
+import { AlbumListWithData } from '../Album';
 // import community from './community.png';
 // import education from './education.png';
 // import group from './group.png';
@@ -231,6 +231,32 @@ export default class HomePage extends Component {
           </ContentWrapper>
 
           <ContentWrapper>
+            <VideoListWithData
+              category={'SATURDAY'}
+              header={
+                <HeaderLink to="/videos/saturday">{'토요말씀'}</HeaderLink>
+              }
+              location={props.location}
+              first={3}
+              moreLink={'/videos/saturday'}
+              fetchPolicy={'cache-and-network'}
+            />
+          </ContentWrapper>
+
+          <ContentWrapper>
+            <VideoListWithData
+              category={'SPECIAL'}
+              header={
+                <HeaderLink to="/videos/special">{'특별말씀'}</HeaderLink>
+              }
+              location={props.location}
+              first={3}
+              moreLink={'/videos/special'}
+              fetchPolicy={'cache-and-network'}
+            />
+          </ContentWrapper>
+
+          <ContentWrapper>
             <WeeklyListWithData
               header={<HeaderLink to="/weekly">{'주보'}</HeaderLink>}
               location={props.location}
@@ -241,18 +267,16 @@ export default class HomePage extends Component {
             />
           </ContentWrapper>
 
-          {/*          
-        
-      
-    <ContentWrapper>
-              <BulletinListWithData
-                header={<HeaderLink to="/album">{'행사앨범'}</HeaderLink>}
-                location={props.location}
-                first={3}
-                moreLink={'/album'}
-                fetchPolicy={'cache-and-network'}
-              />
- </ContentWrapper> */}
+          <ContentWrapper>
+            <AlbumListWithData
+              header={<HeaderLink to="/album">{'행사앨범'}</HeaderLink>}
+              location={props.location}
+              history={props.history}
+              first={3}
+              moreLink={'/album'}
+              fetchPolicy={'cache-and-network'}
+            />
+          </ContentWrapper>
         </Section>
       </article>
     );
