@@ -96,3 +96,30 @@ export const listAlbums = /* GraphQL */ `
     }
   }
 `;
+export const getSample = /* GraphQL */ `
+  query GetSample($id: ID!) {
+    getSample(id: $id) {
+      id
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listSamples = /* GraphQL */ `
+  query ListSamples(
+    $filter: ModelSampleFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listSamples(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;

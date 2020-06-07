@@ -112,3 +112,33 @@ export const onDeleteAlbum = /* GraphQL */ `
     }
   }
 `;
+export const onCreateSample = /* GraphQL */ `
+  subscription OnCreateSample {
+    onCreateSample {
+      id
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateSample = /* GraphQL */ `
+  subscription OnUpdateSample {
+    onUpdateSample {
+      id
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteSample = /* GraphQL */ `
+  subscription OnDeleteSample {
+    onDeleteSample {
+      id
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;

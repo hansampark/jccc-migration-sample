@@ -139,3 +139,42 @@ export const deleteAlbum = /* GraphQL */ `
     }
   }
 `;
+export const createSample = /* GraphQL */ `
+  mutation CreateSample(
+    $input: CreateSampleInput!
+    $condition: ModelSampleConditionInput
+  ) {
+    createSample(input: $input, condition: $condition) {
+      id
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateSample = /* GraphQL */ `
+  mutation UpdateSample(
+    $input: UpdateSampleInput!
+    $condition: ModelSampleConditionInput
+  ) {
+    updateSample(input: $input, condition: $condition) {
+      id
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteSample = /* GraphQL */ `
+  mutation DeleteSample(
+    $input: DeleteSampleInput!
+    $condition: ModelSampleConditionInput
+  ) {
+    deleteSample(input: $input, condition: $condition) {
+      id
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
