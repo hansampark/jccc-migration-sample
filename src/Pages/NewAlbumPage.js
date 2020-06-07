@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import InfiniteCalendar from 'react-infinite-calendar';
 import styled from 'styled-components';
 import { Storage, API, graphqlOperation } from 'aws-amplify';
+import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 import { v4 as uuidv4 } from 'uuid';
 import { createAlbum } from '../graphql/mutations';
 
@@ -138,6 +139,7 @@ const NewAlbumForm = (props) => {
   return (
     <Wrapper zDepth={1}>
       <Relative style={{ width: '100%', height: '100%' }}>
+        <AmplifySignOut />
         <Form onSubmit={handleSubmit}>
           <FieldSet>
             <FormSection>
@@ -228,4 +230,4 @@ const NewAlbumForm = (props) => {
   );
 };
 
-export default NewAlbumForm;
+export default withAuthenticator(NewAlbumForm);

@@ -4,6 +4,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { API, graphqlOperation } from 'aws-amplify';
+import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 import { getWeekly } from '../graphql/queries';
 import { Page } from '../components';
 import EditWeeklyForm from '../Weekly/EditWeeklyFormModal';
@@ -26,6 +27,7 @@ const EditWeeklyPage = (props) => {
 
   return (
     <Page>
+      <AmplifySignOut />
       {weekly && (
         <EditWeeklyForm
           key={match.params.id}
@@ -37,4 +39,4 @@ const EditWeeklyPage = (props) => {
   );
 };
 
-export default EditWeeklyPage;
+export default withAuthenticator(EditWeeklyPage);

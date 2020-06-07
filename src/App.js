@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
-import { Auth, API, signInButton } from 'aws-amplify';
 import Styled from 'styled-components';
 import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
-import { withAuthenticator } from 'aws-amplify-react';
 import Home from './Pages/Home';
 import AllWeekliesPage from './Pages/AllWeekliesPage';
 import NewWeeklyPage from './Pages/NewWeeklyPage';
@@ -70,9 +68,9 @@ function App() {
         <Wrapper>
           <Navigation>
             <StyledLink to="/">Home</StyledLink>
-            <StyledLink to="/videos/new">Videos</StyledLink>
-            <StyledLink to="/weekly/new">Weekly</StyledLink>
-            <StyledLink to="/album/new">Album</StyledLink>
+            <StyledLink to="/videos">Videos</StyledLink>
+            <StyledLink to="/weekly">Weekly</StyledLink>
+            <StyledLink to="/album">Album</StyledLink>
           </Navigation>
 
           <ContentWrapper>
@@ -98,4 +96,4 @@ function App() {
   );
 }
 
-export default withAuthenticator(App);
+export default App;

@@ -2,6 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 import { API, graphqlOperation } from 'aws-amplify';
+import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 import InfiniteCalendar from 'react-infinite-calendar';
 import {
   createVideo as CreateVideo,
@@ -140,77 +141,82 @@ class VideoForm extends React.Component {
     const vid = url && extractYoutubeVideoID(url);
 
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <FieldSet>
-          <FormControl>
-            <Label>{'Category *'}</Label>
-            <select
-              onChange={this.handleCategoryChange}
-              value={category}
-              error={errors.category}
-            >
-              {Object.keys(CATEGORIES).map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-            {errors.category && <ErrorMessage>{errors.category}</ErrorMessage>}
-          </FormControl>
+      <>
+        <AmplifySignOut />
+        <Form onSubmit={this.handleSubmit}>
+          <FieldSet>
+            <FormControl>
+              <Label>{'Category *'}</Label>
+              <select
+                onChange={this.handleCategoryChange}
+                value={category}
+                error={errors.category}
+              >
+                {Object.keys(CATEGORIES).map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+              {errors.category && (
+                <ErrorMessage>{errors.category}</ErrorMessage>
+              )}
+            </FormControl>
 
-          <FormControl>
-            <Label>{'URL *'}</Label>
-            <Input
-              type="text"
-              onChange={this.handleURLChange}
-              value={url}
-              error={errors.url}
+            <FormControl>
+              <Label>{'URL *'}</Label>
+              <Input
+                type="text"
+                onChange={this.handleURLChange}
+                value={url}
+                error={errors.url}
+              />
+              {errors.url && <ErrorMessage>{errors.url}</ErrorMessage>}
+            </FormControl>
+
+            <FormControl>
+              <Label>{'Title *'}</Label>
+              <Input
+                type="text"
+                onChange={this.handleTitleChange}
+                value={title}
+                error={errors.title}
+              />
+              {errors.title && <ErrorMessage>{errors.title}</ErrorMessage>}
+            </FormControl>
+
+            <FormControl>
+              <Label>{'Date *'}</Label>
+              <InfiniteCalendar
+                selected={date}
+                displayOptions={{
+                  layout: window.innerWidth <= 769 ? 'portrait' : 'landscape',
+                }}
+                width={'100%'}
+                height={300}
+                onSelect={this.handleDateChange}
+              />
+              {errors.date && <ErrorMessage>{errors.date}</ErrorMessage>}
+            </FormControl>
+
+            {vid && (
+              <Video>
+                <VideoThumbnail youtubeId={vid} title={title} />
+              </Video>
+            )}
+          </FieldSet>
+
+          <ButtonContainer>
+            <Button
+              type="submit"
+              label={'Submit'}
+              primary
+              disabled={loading}
+              loading={loading}
             />
-            {errors.url && <ErrorMessage>{errors.url}</ErrorMessage>}
-          </FormControl>
-
-          <FormControl>
-            <Label>{'Title *'}</Label>
-            <Input
-              type="text"
-              onChange={this.handleTitleChange}
-              value={title}
-              error={errors.title}
-            />
-            {errors.title && <ErrorMessage>{errors.title}</ErrorMessage>}
-          </FormControl>
-
-          <FormControl>
-            <Label>{'Date *'}</Label>
-            <InfiniteCalendar
-              selected={date}
-              displayOptions={{
-                layout: window.innerWidth <= 769 ? 'portrait' : 'landscape',
-              }}
-              width={'100%'}
-              height={300}
-              onSelect={this.handleDateChange}
-            />
-            {errors.date && <ErrorMessage>{errors.date}</ErrorMessage>}
-          </FormControl>
-
-          {vid && (
-            <Video>
-              <VideoThumbnail youtubeId={vid} title={title} />
-            </Video>
-          )}
-        </FieldSet>
-
-        <ButtonContainer>
-          <Button
-            type="submit"
-            label={'Submit'}
-            primary
-            disabled={loading}
-            loading={loading}
-          />
-        </ButtonContainer>
-      </Form>
+          </ButtonContainer>
+        </Form>
+      </>
     );
   }
 
@@ -299,4 +305,4 @@ class VideoForm extends React.Component {
   };
 }
 
-export default VideoForm;
+export default withAuthenticator(VideoForm);

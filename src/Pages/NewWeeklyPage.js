@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import InfiniteCalendar from 'react-infinite-calendar';
 import styled from 'styled-components';
 import { Storage, API, graphqlOperation } from 'aws-amplify';
+import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 import { v4 as uuidv4 } from 'uuid';
 import { createWeekly } from '../graphql/mutations';
 
@@ -128,6 +129,7 @@ const NewWeeklyForm = (props) => {
   return (
     <Wrapper zDepth={1}>
       <Relative style={{ width: '100%', height: '100%' }}>
+        <AmplifySignOut />
         <Form onSubmit={handleSubmit}>
           <FieldSet>
             <FormSection>
@@ -208,4 +210,4 @@ const NewWeeklyForm = (props) => {
   );
 };
 
-export default NewWeeklyForm;
+export default withAuthenticator(NewWeeklyForm);

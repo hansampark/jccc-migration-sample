@@ -4,6 +4,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { API, graphqlOperation } from 'aws-amplify';
+import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 import { getAlbum } from '../graphql/queries';
 import { Page } from '../components';
 import EditAlbumForm from '../Album/EditAlbumFormModal';
@@ -26,6 +27,7 @@ const EditAlbumPage = (props) => {
 
   return (
     <Page>
+      <AmplifySignOut />
       {album && (
         <EditAlbumForm
           key={match.params.id}
@@ -37,4 +39,4 @@ const EditAlbumPage = (props) => {
   );
 };
 
-export default EditAlbumPage;
+export default withAuthenticator(EditAlbumPage);
