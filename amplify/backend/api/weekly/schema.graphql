@@ -31,3 +31,8 @@ type Album @model {
   images: [String!]
   updatedAt: AWSDateTime!
 }
+
+type Sample @model {
+  id: ID!
+  name: String!
+}
